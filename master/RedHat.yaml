@@ -1,0 +1,68 @@
+
+kubernetes::kubernetes_version: 1.18.0
+kubernetes::kubernetes_package_version: 1.18.0
+kubernetes::container_runtime: docker
+kubernetes::cni_network_provider: https://raw.githubusercontent.com/cilium/cilium/v1.7/install/kubernetes/quick-install.yaml
+kubernetes::cni_pod_cidr: 10.244.0.0/16
+kubernetes::etcd_initial_cluster: puppet-agent-01=https://192.168.42.129:2380,puppet-agent-02=https://192.168.42.130:2380,puppet-agent-03=https://192.168.42.131:2380
+kubernetes::etcd_peers:
+- 192.168.42.129
+- 192.168.42.130
+- 192.168.42.131
+kubernetes::etcd_ip: "%{networking.ip}"
+kubernetes::kube_api_advertise_address: "%{networking.ip}"
+kubernetes::api_server_count: 3
+kubernetes::install_dashboard: true
+kubernetes::controller_address: 192.168.42.129:6443
+kubernetes::etcd_version: 3.4.8
+kubernetes::etcd_archive: etcd-v3.4.8-linux-amd64.tar.gz
+kubernetes::etcd_source: https://github.com/etcd-io/etcd/releases/download/v3.4.8/etcd-v3.4.8-linux-amd64.tar.gz
+kubernetes::containerd_version: 
+kubernetes::manage_docker: true
+kubernetes::docker_yum_baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+kubernetes::docker_yum_gpgkey: https://download.docker.com/linux/centos/gpg
+kubernetes::docker_package_name: docker-ce
+kubernetes::docker_version: 18.06.1.ce-3.el7
+kubernetes::discovery_token_hash: 6a0e8ee1e0250343a281bb2224c421e26e13af5356c8e20e1fb22bee8bd7caef
+kubernetes::ignore_preflight_errors: 
+- FileAvailable--etc-kubernetes-kubelet.conf
+- FileAvailable--etc-kubernetes-pki-ca.crt
+kubernetes::token: 5c0297.b89661c62416b736
+kubernetes::sa_pub: |
+  -----BEGIN PUBLIC KEY-----
+  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1I6fKX8MqZJMD62Exsui
+  Q+UcDLK74gFWeCqFxID1kiOuXpxaIllWrT7bdcBVu8J3DKsZXc1Xw9feY8IJU3kq
+  7GY7Yl5zwpIcLLa4/9FFB3mKOnqkHutIX4Y9fSXFOr7HMc0rxZ+abobe1jeoY49v
+  K0jrbwdDqyX9VY0ui3HQ+wfXHlnbIdbMQJ+Mn5Md7+zOo5J6FmVHgtLvZT2dgO7n
+  jB5lrl/VKTX+h1vdufBJQJuRwpLQW8vKZJTk44AVRZoRuvg2aXBU8vqeK8zmnbOW
+  AA5YlM6q/pOFhN/W9C3wACJ9yL/VikvA7xcNIrBFjQRttitX1SPAYkAUjZILFHRR
+  HwIDAQAB
+  -----END PUBLIC KEY-----
+kubernetes::sa_key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEpAIBAAKCAQEA1I6fKX8MqZJMD62ExsuiQ+UcDLK74gFWeCqFxID1kiOuXpxa
+  IllWrT7bdcBVu8J3DKsZXc1Xw9feY8IJU3kq7GY7Yl5zwpIcLLa4/9FFB3mKOnqk
+  HutIX4Y9fSXFOr7HMc0rxZ+abobe1jeoY49vK0jrbwdDqyX9VY0ui3HQ+wfXHlnb
+  IdbMQJ+Mn5Md7+zOo5J6FmVHgtLvZT2dgO7njB5lrl/VKTX+h1vdufBJQJuRwpLQ
+  W8vKZJTk44AVRZoRuvg2aXBU8vqeK8zmnbOWAA5YlM6q/pOFhN/W9C3wACJ9yL/V
+  ikvA7xcNIrBFjQRttitX1SPAYkAUjZILFHRRHwIDAQABAoIBAGNOmwgNJsJW6phs
+  jls+qnokIZ3BJ8yoqViNLWAojBMR/paPYAEqUjew5WG3UZbefTZ6/ef4VyfVxD5B
+  WpAYTTiTbu0/ib/++ZDeccJ7aE/ctfsqb2FOtcqDclj0+5e9qF0ZKXk0XzeCZbwZ
+  1t9lFSBY+j4uW6wrnJeK1ZMqwuN05VC8Ve3o/NPqadl1Mw3APUYE8weuZYZ71gEq
+  0XWHvLkvCIIbSFSMLR+fWVOPmcqbNHXjqyosbd8MtgE1J2YrTzYYpqpPvOM6B7vK
+  DXagI93wZwxrI/D63Qdob6EeXB2OQsC9cZ2bnp9r1TH+oBhhFba8HqPCDzFPb0WM
+  OPIZu2kCgYEA6cUim4AJORksWsMhdYuXwH1dSkV2XYLuvZwpzY05u6pHxEywuHWC
+  Qs1IajiFDOpoyIVDkZ/CGybotpsC3zcd02S+V+eqGDscE7pKRmOEerx/x3gbZMLJ
+  +RXkkk86LpYNc3ZqO+o52MeCOjMfR6+ocfmb3xpjgPlgJvfGaaRhEc0CgYEA6MUU
+  6dkTvbQAccfZ0ivegckd04QJA8swqrU/O7HqLUmXAdKOj04fSie3QcBEjjqu1cWF
+  4fBnsXggZ3SED9yU/yi4IMACSpKJ9oq+uKss65K3BEAfnoXXOg940oGRuzYbsWVa
+  hYrKKSSXvJsBq3GUFWwqBtB3bweiFAUdmraGspsCgYEAwebahdD11X6j48TnA/D9
+  tpRFxU1ImNf53xyhL/ZsZNUhIhnam6YcnfxYjILFGal1sJ2ZJjk1cAAeFxkMkMnO
+  24E8wP1PgTnGWDa1VR1Gzed8tZ9SWYmYrhsStKkywWGFVrhp9biass0Jn+y3jWaO
+  ebtpJu1ki55NuwTadtX6DiECgYEAx1ACYV68daLNAqCDFmD0DSPeA0C6y2HQUUwT
+  UhU9FPw/bpMR+QmG52NsmsN8sGD1VhzlUBsfXyoibROrBT324ynFyF1BWQNzWQVi
+  3BPOygR97AjQSlgGfDPFXFMQK0LgoZzMzy6RfntT5m7AFkKR72oH7n/Q1OSvVv8u
+  Y0zJt+MCgYBG5lN3PlCOfE7tvo1bpfk80Zo0UsbVQN9h/CiJhMbxRzNznsYPUccK
+  dA3PIBNlSQpSZCE++KaoflAvxY9cKH4ZFPM5wGoF78h3exl55azdouFe71xAow3s
+  I5QTHb8TSxyvTRIePrGbemtyccMg1ixC9LIeU1y/xvBYzoZeiZyiGA==
+  -----END RSA PRIVATE KEY-----
