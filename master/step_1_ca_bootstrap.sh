@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
  
 ###########################################################################################
-#											                                              #
-#		STEP 1 OF THE WHOLE PROCESS. RUN THIS SCRIPT BEFORE ANYTHING.     	              #
+#                                                                                         #
+#       STEP 1 OF THE WHOLE PROCESS. RUN THIS SCRIPT BEFORE ANYTHING.                     #
 #                                                                                         #
 # THIS SCRIPT WILL GENERATE KUBERNETES CA CERTIFICATE AND PRIVAKEY KEY ON EXECUTING NODE. #
 #                                                                                         #
@@ -12,7 +12,7 @@ set -xe
  
 ####### variables ############
  
-CA_DIR=${CA_DIR:-~/kubernetes_ca}            		##### WILL USE PROVIDED CA_DIR IF SET
+CA_DIR=${CA_DIR:-~/kubernetes_ca}               ##### WILL USE PROVIDED CA_DIR IF SET
 CA_KEY_FILENAME="kubernetes_ca"                 ##### YOU MAY CHANGE THE FILE NAMES IF YOU WANT TO
 CA_CERT_FILENAME="kubernetes_ca"                ##### YOU MAY CHANGE THE FILE NAMES IF YOU WANT TO
 CA_CSR_CONFIG_FILENAME="kubernetes_ca_csr"      ##### YOU MAY CHANGE THE FILE NAMES IF YOU WANT TO

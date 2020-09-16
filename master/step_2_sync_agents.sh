@@ -2,7 +2,7 @@
  
 ####################################################################################################################
 #                                                                                                                  #
-#		STEP 2 OF THE WHOLE PROCESS. RUN THIS SCRIPT WITH SUDO PRIVILEDGES ON MASTER.     	           #
+#   STEP 2 OF THE WHOLE PROCESS. RUN THIS SCRIPT WITH SUDO PRIVILEDGES ON MASTER.     	                           #
 #                                                                                                                  #
 # THIS SCRIPT WILL SIGN CERTIFICATE SIGNING REQUESTS (CSR) FROM GIVEN PUPPET AGENTS AND SENDS BACK THE SIGNED      #
 # CERTIFICATES. IN A NUTSHELL, IT COPIES CSR FROM RELEVANT AGENT TO LOCAL DIRECTORY, SIGNS IT AND THEN COPIES THE  #
@@ -15,12 +15,12 @@
  
 set -xe
  
-CA_DIR=${CA_DIR:-~/kubernetes_ca}       ##### WILL USE PROVIDED CA_DIR IF SET
-CA_CERT_FILENAME="kubernetes_ca"        #### NEED TO BE SAME AS IN kubernetes_ca_cert_generation.sh
-CA_KEY_FILENAME="kubernetes_ca"         #### NEED TO BE SAME AS IN kubernetes_ca_cert_generation.sh
+CA_DIR=${CA_DIR:-~/kubernetes_ca}       #### WILL USE PROVIDED CA_DIR IF SET
+CA_CERT_FILENAME="kubernetes_ca"        #### NEED TO BE SAME AS IN STEP 1 SCRIPT
+CA_KEY_FILENAME="kubernetes_ca"         #### NEED TO BE SAME AS IN STEP 1 SCRIPT
  
 ########## CHANGE FOLLOWING PARAMETER VALUE BASED UPON YOUR SETUP ######
-if [ -z "$1" ] ; then # ONLY SET HOSTNAMES IF UNDEF
+if [ -z "$1" ] ; then               # ONLY SET HOSTNAMES IF UNDEF
   PUPPET_AGENT_HOSTNAMES=(
     puppet-agent-01
     puppet-agent-02

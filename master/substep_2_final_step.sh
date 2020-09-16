@@ -18,10 +18,10 @@ HOSTNAME=$(hostname)
 DESTINATION_DIR=/etc/kubernetes
 DESTINATION_PKI_DIR=$DESTINATION_DIR/pki
  
-AGENT_CSR_HOLDER_DIRECTORY=${AGENT_CSR_HOLDER_DIRECTORY:-~/kubernetes-certs}            ###### NEEDS TO BE SAME AS "AGENT_TEMP_CSR_HOLDER_DIR" VARIABLE FROM step_2_sync_agents.sh
+AGENT_CSR_HOLDER_DIRECTORY=${AGENT_CSR_HOLDER_DIRECTORY:-~/kubernetes-certs}            ###### NEEDS TO BE SAME AS "AGENT_TEMP_CSR_HOLDER_DIR" VARIABLE FROM STEP 2 SCRIPT.
  
-KUBERNETES_CONTROLLER_AGENT_HOSTNAME=puppet-agent-01      ###### NEEDS TO BE THE FIRST HOSTNAME OF YOUR kubernetes::etcd_initial_cluster VARIABLE IN GENERATED REDHAT.YAML FILE
-                                                          ###### OR THE FIRST HOSTNAME OF YOUR step_3_generate_redhat.sh
+KUBERNETES_CONTROLLER_AGENT_HOSTNAME=puppet-agent-01                                    ###### NEEDS TO BE THE FIRST HOSTNAME OF YOUR kubernetes::etcd_initial_cluster VARIABLE IN GENERATED REDHAT.YAML FILE
+                                                                                        ###### OR THE FIRST HOSTNAME OF YOUR STEP 3 SCRIPT.
 KUBERNETES_CONTROLLER_ADDRESS=$(grep -F "$KUBERNETES_CONTROLLER_AGENT_HOSTNAME" "/etc/hosts" | awk '{ print $1}')
  
 COMMON_CLIENT_FILENAME="common-client"
