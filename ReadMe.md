@@ -28,7 +28,7 @@ In the following guide, we use a hybrid of both of the approaches. (a). the firs
     192.168.42.131	puppet-agent-03
     192.168.42.132	puppet-agent-04
     ```
-3.	On agent VMs, your puppet.conf (`/etc/puppetlabs/puppet/puppet.conf`) must have an alternative DNS name because the ETCD is going to use that. The goal is to have a puppet agent certificate signed by the puppet master CA which will have DSN alternative names in the certificate, and that certificate will be used for ETCD communication. Add following line to the puppet.conf file : 
+3.	On agent VMs, your puppet.conf (`/etc/puppetlabs/puppet/puppet.conf`) must have an alternative DNS name because the ETCD is going to use that. The goal is to have a puppet agent certificate signed by the puppet master CA which will have DNS alternative names in the certificate, and that certificate will be used for ETCD communication. Add following line to the `puppet.conf` file : 
     
     ```puppet
     [main] 
@@ -63,7 +63,7 @@ In the following guide, we use a hybrid of both of the approaches. (a). the firs
 
 6.	`site.pp` file on puppet master (located at `/etc/puppetlabs/code/environments/production/manifests/site.pp`) has entries for each puppet agent with relevant kubernetes module parameters. (i.e. `worker => true` OR `controller => true`). If you don't have entries, follow this guide. You will find relevant information to add at **step 14**.
 
-7.	Docker CE needs to be installed on the puppet master to run the `puppetlabs/kubetool` docker image. The version should be `>= 18.06.1-ce`. This step is necessary only if you want to run the script to generate a new `RedHat.yaml` file. If you don't want to generate a `RedHat.yaml` file, just use the uploaded `RedHat.yaml` file from the BB repo and adjust your ETCD Cluster hosts and IP address entries. 
+7.	Docker CE needs to be installed on the puppet master to run the `puppetlabs/kubetool` docker image. The version should be `>= 18.06.1-ce`. This step is necessary only if you want to run the script to generate a new `RedHat.yaml` file. If you don't want to generate a `RedHat.yaml` file, just use the uploaded `RedHat.yaml` file from the repo and adjust your ETCD Cluster hosts and IP address entries. 
 
 8.	The puppet master's SSHability to all puppet agents. This will be needed to execute scripts that (a) generate private keys and Certificate Signing Requests(CSR) on agents, (b) copies the CSRs to the puppet master, (c) signing on master and then finally, (d) copying back the signed certificates to the corresponding agents. 
 
@@ -83,6 +83,8 @@ In the following guide, we use a hybrid of both of the approaches. (a). the firs
     ssh root
 
     > This will fail if your VM can't `ssh root@<remote machine>`
+
+
 
 # Setup guide to use External Kubernetes Certificates
 
@@ -161,7 +163,7 @@ In the following guide, we use a hybrid of both of the approaches. (a). the firs
     drwx------. 3 root root 4096 Jun  7 19:07 pki
     -rw-------. 1 root root 5649 Jun  7 19:05 scheduler.conf
     ```
-5.	By this point, we have generated all of the necessary Kubernetes certs and config files on all future kubernetes nodes. Now, on puppet master, run the docker container for `puppetlabs/kubetool` that generates the <OS>.yaml, and agent specific yaml files. Use the script `~/master/step_3_generate_redhat.sh` that takes care of everything needed for the setup. Please adjust your agent hostnames and IP addresses in the script. Run the script with following command **on puppet master**.
+5.	By this point, we have generated all of the necessary Kubernetes certs and config files on all future kubernetes nodes. Now, on puppet master, run the docker container for `puppetlabs/kubetool` that generates the \<OS\>.yaml, and agent specific yaml files. Use the script `~/master/step_3_generate_redhat.sh` that takes care of everything needed for the setup. Please adjust your agent hostnames and IP addresses in the script. Run the script with following command **on puppet master**.
 
     ```console
     [centos@puppet-master ~]$ sudo ./step_3_generate_redhat.sh
@@ -173,11 +175,11 @@ In the following guide, we use a hybrid of both of the approaches. (a). the firs
 
     controller address
     
-    > Make sure that the `kubernetes::controller_address` value in `RedHat.yaml` and the IP address in the `clusters.cluster.server` parameter in `admin.conf` yaml file on any agent are the same. If not, then open your scripts `create_keys_and_csr.sh` &  `copy_certs_and_conf_to_kubernetes_directory.sh` and update the `KUBERNETES_CONTROLLER_AGENT_HOSTNAME` variable with appropriate hostnames corresponding to the expected IP addresses, and finally run the `sign_and_send_all_kubernetes_certs.sh` from step 3 again. These values are going to be injected in the config files generated from those shell scripts so that nodes can communicate accordingly to the controller address.
+    > Make sure that the `kubernetes::controller_address` value in `RedHat.yaml` and the IP address in the `clusters.cluster.server` parameter in `admin.conf` yaml file on any agent are the same. If not, then open your scripts `substep_2_final_step.sh` &  `substep_2_agent_bootstrap.sh` and update the `KUBERNETES_CONTROLLER_AGENT_HOSTNAME` variable with appropriate hostnames corresponding to the expected IP addresses, and finally run the `step_2_sync_agents.sh` from step 3 again. These values are going to be injected in the config files generated from those shell scripts so that nodes can communicate accordingly to the controller address.
 
     `ignore-preflight-errors`
     
-    > In the previous script, we added a few lines to `RedHat.yaml` file:  `'ignore_preflight_errors'`. If you do not add them on a kubernetes worker, the installation fails. This flags indicates to the kubernetes worker to ignore when the `ca.crt` and `kubelet.conf` files already exist. The worker looks for `ca.crt` file when it starts, and if it does not find it, then it fails right away. If you place the `ca.crt` file (which the `copy_certs_and_conf_to_kubernetes_directory.sh` is doing for you), then it complains that there is an existing `ca.crt` file in the `/etc/kubernetes/pki` directory and fails too. Seems like a bug in the installation step from `puppetlabs/kubernetes` module. As for the `kubelet.conf`, we need to create one so that we can inject the Kubernetes CA signed `client-certificate-data` instead of letting the kubernetes module generate that. 
+    > In the previous script, we added a few lines to `RedHat.yaml` file:  `'ignore_preflight_errors'`. If you do not add them on a kubernetes worker, the installation fails. This flags indicates to the kubernetes worker to ignore when the `ca.crt` and `kubelet.conf` files already exist. The worker looks for `ca.crt` file when it starts, and if it does not find it, then it fails right away. If you place the `ca.crt` file (which the `step_2_sync_agents.sh` is doing for you), then it complains that there is an existing `ca.crt` file in the `/etc/kubernetes/pki` directory and fails too. Seems like a bug in the installation step from `puppetlabs/kubernetes` module. As for the `kubelet.conf`, we need to create one so that we can inject the Kubernetes CA signed `client-certificate-data` instead of letting the kubernetes module generate that. 
 
 6.	Run the script `step_3_generate_redhat.sh`. Once it finishes you can see `RedHat.yaml` file generated in `/etc/puppetlabs/code/environments/production/data` directory. Open the `RedHat.yaml` file and remove the following sections/parameters and values.
     * kubernetes::etcd_ca_crt,
@@ -310,7 +312,7 @@ In the following guide, we use a hybrid of both of the approaches. (a). the firs
     }
     ```
 
-15.	We need to create couple of files in `/etc/kubernetes/pki` folder so that the created custom facts are loaded. Just create 2 files named `ca.crt` and `front-proxy-ca.crt` in `/etc/kubernetes/pki` folder. Confirm that those files reside in the directory: 
+15.	We need to create couple of files in `/etc/kubernetes/pki` folder so that the created custom facts are loaded. Just create 2 files named `ca.crt` and `front-proxy-ca.crt` in `/etc/kubernetes/pki` folder with gibberish file contents (It's not going to be used anywhere. It's used only for loading custom facts). Confirm that those files reside in the directory: 
 
     ```console
     [root@puppet-master production]# ll /etc/kubernetes/pki/
